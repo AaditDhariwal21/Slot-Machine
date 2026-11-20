@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 43093061}
   - component: {fileID: 43093060}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: InputField for Bets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
