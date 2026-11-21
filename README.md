@@ -133,7 +133,7 @@ Assets/
 └── ...
 ```
 
-*The structure above represents the intended organization of the project. Some folders may be omitted if they are not applicable.*
+*The structure above represents the intended organization of the project. Some folders may be omitted if they are not applicable. Like for example the build folder is ommitted since the game was already published and playable online at Itch*
 
 ## 🚧 What I Learned
 
