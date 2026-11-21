@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] RNGManager rngManager;
     [SerializeField] PayoutManager payoutManager;
+
+    [SerializeField] private ReelController[] reels;
     private bool slotMachineSpinning = false;
 
     void Awake()
@@ -52,7 +52,16 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("You cannot bet more than what you have!");
+                    if(betAmount > currentCash)
+                    {
+                        hudController.SetBetResult("Invalid Bet", Color.yellow);
+                    }
+                    else if(betAmount < 10)
+                    {
+                        hudController.SetBetResult("Min Bet : $10", Color.yellow);
+                    }
+                    
+                    
                 }
             }
         }
@@ -70,31 +79,53 @@ public class GameManager : MonoBehaviour
     private void SpinSlotMachine()
     {
         slotMachineSpinning = true;
+        
+        currentCash -= betAmount;
+        hudController.SetCurrentCash(currentCash);
+        hudController.SetBetResult("- $" + betAmount, Color.red);
+
         SlotSymbol[] spinResult = rngManager.GenerateRandomSlotResult();
 
+        int completedReels = 0;
+
+        for (int i = 0; i < reels.Length; i++)
+        {
+            int reelIndex = i;
+
+            reels[reelIndex].SpinTo(
+                spinResult[reelIndex],
+                () =>
+                {
+                    completedReels++;
+
+                    // Resolve payout only after all reels stop.
+                    if (completedReels == reels.Length)
+                    {
+                        ResolveSpin(spinResult);
+                    }
+                }
+            );
+        }
+    }
+
+    private void ResolveSpin(SlotSymbol[] spinResult)
+    {
         if(spinResult[0] == spinResult[1] && spinResult[1] == spinResult[2])
         {
             payoutManager.HitJackpot(betAmount, spinResult[0]);
-        }
-        else
-        {
-            payoutManager.LoseCash(betAmount);
-        }
 
-        decimal payout = payoutManager.GetPayout();
+            decimal payout = payoutManager.GetPayout();
 
 
-        if(payout > 0)
-        {
-            hudController.SetBetResult("+ $" + payout, Color.green);
-        }
-        else
-        {
-            hudController.SetBetResult("- $" + betAmount, Color.red);
-        }
+            if(payout > 0)
+            {
+                hudController.SetBetResult("+ $" + payout, Color.green);
+            }
 
-        currentCash += payout;
-        hudController.SetCurrentCash(currentCash);
+            currentCash += payout;
+            hudController.SetCurrentCash(currentCash);
+        }
+        
         hudController.UnlockBetInputField();
         slotMachineSpinning = false;
     }

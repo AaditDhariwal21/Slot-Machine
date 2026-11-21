@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PayoutManager : MonoBehaviour
 {
-    private decimal payout;
+    private decimal payout = 0;
 
     public void HitJackpot(decimal betAmount, SlotSymbol symbol)
     {
@@ -22,11 +22,6 @@ public class PayoutManager : MonoBehaviour
         {
             payout = betAmount * 3m;
         }
-    }
-
-    public void LoseCash(decimal betAmount)
-    {
-        payout = -betAmount;
     }
 
     public decimal GetPayout()
