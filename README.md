@@ -4,7 +4,7 @@ A classic slot machine built in Unity using C#. The project focuses on recreatin
 
 ## 🎮 Play the Game
 
-**[Play the WebGL Build on itch.io](YOUR_ITCH_IO_LINK_HERE)**
+**[Play the WebGL Build on itch.io](https://sparkyyyboiii.itch.io/slots)**
 
 The game is playable directly in the browser. No installation is required.
 
