@@ -1,46 +1,24 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class LeverController : MonoBehaviour
 {
-    private CircleCollider2D col;
-    private Camera mainCamera;
+    private SpriteRenderer leverSprite;
+    [SerializeField] private SpriteRenderer pulledLeverSprite;
 
-    [SerializeField] private GameObject pulledLever;
-    bool leverPulled = false;
     void Awake()
     {
-        col = GetComponent<CircleCollider2D>();    
-        mainCamera = Camera.main;
+        leverSprite = GetComponent<SpriteRenderer>();
     }
 
-    void Update()
+    public IEnumerator OnLeverPulled()
     {
-        if(Mouse.current!= null && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-
-            if (col.OverlapPoint(mousePosition) && leverPulled == false)
-            {
-                StartCoroutine(OnLeverPulled());
-            }
-        }
-    }
-
-    IEnumerator OnLeverPulled()
-    {
-        leverPulled = true; 
-
-        GetComponent<SpriteRenderer>().enabled = false;
-        pulledLever.GetComponent<SpriteRenderer>().enabled =  true;
+        leverSprite.enabled = false;
+        pulledLeverSprite.enabled =  true;
 
         yield return new WaitForSeconds(0.25f);
 
-        RNGManager.rngInstance.GenerateRandomSlotResult();
-
-        GetComponent<SpriteRenderer>().enabled = true;
-        pulledLever.GetComponent<SpriteRenderer>().enabled =  false;
-        leverPulled = false;
+        leverSprite.enabled = true;
+        pulledLeverSprite.enabled =  false;
     }
 }

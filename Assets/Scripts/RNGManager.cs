@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class RNGManager : MonoBehaviour
 {
-
-    public static RNGManager rngInstance;
     private SlotSymbol[] symbolPool = new SlotSymbol[100];
     private SlotSymbol[] slotResult = new SlotSymbol[3];
 
@@ -15,8 +13,6 @@ public class RNGManager : MonoBehaviour
 
     void Awake()
     {
-        rngInstance = this;
-
         InitializeSymbolPool();
     }
 
@@ -56,7 +52,7 @@ public class RNGManager : MonoBehaviour
     }
 
     //Generating 3 symbols and storing them in a result array
-    public void GenerateRandomSlotResult()
+    public SlotSymbol[] GenerateRandomSlotResult()
     {
         for(int i = 0; i < 3; i++)
         {
@@ -65,13 +61,8 @@ public class RNGManager : MonoBehaviour
         }
 
         Debug.Log(slotResult[0] + " , " + slotResult[1] + " , " + slotResult[2]);
-        
-        if(slotResult[0] == slotResult[1] && slotResult[1]== slotResult[2])
-        {
-            Debug.Log("JACKPOT!!!");
-        }
+        return slotResult;
     }
-
     //Actual Mathematical Algorithm : using LCG with parameters (21,1,100) and seed 7 so that they satisfy Hull-Dobell Theorem and we get a full period.
     private int LCG()
     {
